@@ -2,9 +2,9 @@ name: Docker Build and Cache
 
 on:
   push:
-    branches: [ master ]
+    branches: [master]
   pull_request:
-    branches: [ master ]
+    branches: [master]
   workflow_dispatch:
 
 jobs:
@@ -15,33 +15,33 @@ jobs:
       packages: write
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v3
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
-    - name: Cache Go modules and build cache
-      uses: actions/cache@v4
-      with:
-        path: |
-          go-mod-cache
-          go-build-cache
-        key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+      - name: Cache Go modules and build cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            go-mod-cache
+            go-build-cache
+          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
 
-    - name: restore BuildKit cache
-      uses: reproducible-containers/buildkit-cache-dance@v3.1.2
-      with:
-        cache-map: |
-          {
-            "go-mod-cache": "/go/pkg/mod",
-            "go-build-cache": "/root/.cache/go-build"
-          }
+      - name: restore BuildKit cache
+        uses: reproducible-containers/buildkit-cache-dance@v3.1.2
+        with:
+          cache-map: |
+            {
+              "go-mod-cache": "/go/pkg/mod",
+              "go-build-cache": "/root/.cache/go-build"
+            }
 
-    - name: Build and push Docker image
-      uses: docker/build-push-action@v5
-      with:
-        context: .
-        platforms: linux/amd64
-        cache-from: type=gha
-        cache-to: type=gha,mode=max
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          platforms: linux/amd64
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
