@@ -25,6 +25,7 @@ jobs:
           buildkitd-flags: --debug
 
       - name: Cache Go modules and build cache
+        id: cache-go
         uses: actions/cache@v4
         with:
           path: |
@@ -40,6 +41,8 @@ jobs:
               "go-mod-cache": "/go/pkg/mod",
               "go-build-cache": "/root/.cache/go-build"
             }
+          skip-extraction: ${{ steps.cache-go.outputs.cache-hit }}
+          save-always: true
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
