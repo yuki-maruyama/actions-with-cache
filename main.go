@@ -10,6 +10,15 @@ import (
 	"github.com/yuki-maruyama/actions-with-cache/handlers"
 	"github.com/yuki-maruyama/actions-with-cache/logger"
 	"github.com/yuki-maruyama/actions-with-cache/metrics"
+
+	_ "github.com/aws/aws-sdk-go-v2/service/amplify"
+	_ "github.com/aws/aws-sdk-go-v2/service/apigatewayv2"
+	_ "github.com/aws/aws-sdk-go-v2/service/appconfig"
+	_ "github.com/aws/aws-sdk-go-v2/service/appconfigdata"
+	_ "github.com/aws/aws-sdk-go-v2/service/appmesh"
+	_ "github.com/aws/aws-sdk-go-v2/service/apprunner"
+	_ "github.com/aws/aws-sdk-go-v2/service/athena"
+	_ "github.com/aws/aws-sdk-go-v2/service/batch"
 )
 
 func main() {
@@ -19,7 +28,7 @@ func main() {
 	}
 
 	handler := handlers.NewHandler(logger.Logger, metrics.HTTPRequests)
-	
+
 	r := mux.NewRouter()
 	r.HandleFunc("/health", handler.HealthHandler).Methods("GET")
 	r.HandleFunc("/hello", handler.HelloHandler).Methods("GET")
